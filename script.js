@@ -13,17 +13,9 @@ const albums={
   wedding:[],
   reception:[]
 };
-const TRACKING_ENDPOINT='https://script.google.com/macros/s/AKfycbz-KF-ZKSCU5c3-KX9TGBP03Fekh1eBnq4iIB4nBjIwys9B8BvaedAToxbm6gjyo4Ff/exec';
-const guestName=(new URLSearchParams(location.search).get('guest')||'Unidentified').replace(/_/g,' ').trim().slice(0,80)||'Unidentified';
+const guestName=(new URLSearchParams(location.search).get('guest')||'').replace(/_/g,' ').trim().slice(0,80);
 const greeting=document.querySelector('#guest-greeting');
-if(greeting&&guestName!=='Unidentified')greeting.textContent='Dear '+guestName+', we ';
-if(TRACKING_ENDPOINT){navigator.sendBeacon(TRACKING_ENDPOINT,new Blob([JSON.stringify({guest:guestName})],{type:'text/plain;charset=UTF-8'}));}
-const confirmButton=document.querySelector('#confirm-rsvp');
-const confirmStatus=document.querySelector('#rsvp-status');
-const rsvpGreeting=document.querySelector('#rsvp-greeting');
-if(rsvpGreeting&&guestName!=='Unidentified')rsvpGreeting.textContent='This invitation is especially for '+guestName;
-if(confirmButton&&guestName==='Unidentified'){confirmButton.disabled=true;confirmStatus.textContent='Please open your personalized invitation link to confirm.';}
-if(confirmButton&&guestName!=='Unidentified')confirmButton.addEventListener('click',()=>{confirmButton.disabled=true;const queued=navigator.sendBeacon(TRACKING_ENDPOINT,new Blob([JSON.stringify({action:'confirm',guest:guestName})],{type:'text/plain;charset=UTF-8'}));if(queued){confirmButton.textContent='Confirmation sent';confirmStatus.textContent='Thank you — we look forward to celebrating with you.';}else{confirmButton.disabled=false;confirmStatus.textContent='We could not send your reply. Please try again.';}});
+if(greeting&&guestName)greeting.textContent='Dear '+guestName+', we ';
 const grid=document.querySelector('#photo-grid');
 function showAlbum(name){
   const photos=albums[name];
