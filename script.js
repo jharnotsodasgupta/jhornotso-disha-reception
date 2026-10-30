@@ -13,6 +13,11 @@ const albums={
   wedding:[],
   reception:[]
 };
+const TRACKING_ENDPOINT='https://script.google.com/macros/s/AKfycbz-KF-ZKSCU5c3-KX9TGBP03Fekh1eBnq4iIB4nBjIwys9B8BvaedAToxbm6gjyo4Ff/exec';
+const guestName=(new URLSearchParams(location.search).get('guest')||'Unidentified').trim().slice(0,80)||'Unidentified';
+const greeting=document.querySelector('#guest-greeting');
+if(greeting&&guestName!=='Unidentified')greeting.textContent='Dear '+guestName+', ';
+if(TRACKING_ENDPOINT){navigator.sendBeacon(TRACKING_ENDPOINT,new Blob([JSON.stringify({guest:guestName})],{type:'text/plain;charset=UTF-8'}));}
 const grid=document.querySelector('#photo-grid');
 function showAlbum(name){
   const photos=albums[name];
